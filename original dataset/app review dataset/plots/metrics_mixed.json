@@ -1,0 +1,19 @@
+{
+  "files": [
+    "dataset_IGWA_FB10.csv",
+    "dataset_IGWA_only.csv"
+  ],
+  "samples_total": 230730,
+  "train": 184584,
+  "test": 46146,
+  "accuracy": 0.6787370519655008,
+  "macro_precision": 0.5987054103996069,
+  "macro_recall": 0.6280142959091913,
+  "macro_f1": 0.5747180964838047,
+  "weighted_f1": 0.7174147980228667,
+  "per_class_f1": {
+    "negative": 0.7679429250891795,
+    "neutral": 0.22561169367651732,
+    "positive": 0.7305996706857173
+  }
+}

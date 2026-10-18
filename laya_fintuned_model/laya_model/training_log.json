@@ -1,0 +1,48 @@
+{
+  "args": {
+    "task": "/content/task.json",
+    "data": "/content/laya_train_fixed.jsonl",
+    "val_data": null,
+    "out": "/content/laya_model",
+    "base": "convaiinnovations/laya",
+    "subfolder": null,
+    "encoder": null,
+    "epochs": 1,
+    "batch_size": 8,
+    "lr_encoder": 2e-05,
+    "lr_head": null,
+    "max_tokens": 512,
+    "val_frac": 0.1,
+    "select": "acc",
+    "seed": 0,
+    "device": null,
+    "train_embeddings": false,
+    "push_to_hub": null,
+    "private": false
+  },
+  "history": [
+    {
+      "epoch": 0,
+      "val_mean_acc": 0.8849,
+      "val_soft_nll": 0.3205,
+      "val": {
+        "0": {
+          "acc": 0.8849,
+          "macro_f1": 0.8845,
+          "n": 17260
+        }
+      },
+      "seconds": 5268
+    }
+  ],
+  "temperatures": {
+    "0": 1.6
+  },
+  "validation": {
+    "0": {
+      "acc": 0.8849,
+      "macro_f1": 0.8845,
+      "n": 17260
+    }
+  }
+}

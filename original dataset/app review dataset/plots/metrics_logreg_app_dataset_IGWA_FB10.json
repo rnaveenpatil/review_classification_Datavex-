@@ -1,0 +1,16 @@
+{
+  "file": "dataset_IGWA_FB10.csv",
+  "model": "TF-IDF + LogisticRegression(lbfgs, 3-class)",
+  "train": 140954,
+  "test": 35239,
+  "accuracy": 0.7287380459150373,
+  "macro_precision": 0.5869129994849993,
+  "macro_recall": 0.5973933168924669,
+  "macro_f1": 0.5820676944630226,
+  "weighted_f1": 0.7498671899693329,
+  "per_class_f1": {
+    "negative": 0.7927489177489178,
+    "neutral": 0.17503412710450478,
+    "positive": 0.7784200385356455
+  }
+}

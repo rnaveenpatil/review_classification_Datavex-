@@ -1,0 +1,17 @@
+{
+  "labels": [
+    "Negative",
+    "Positive"
+  ],
+  "questions": [
+    {
+      "id": "sentiment",
+      "type": "choice",
+      "instructions": "What is the sentiment of this review?",
+      "criteria": [
+        "Negative",
+        "Positive"
+      ]
+    }
+  ]
+}
