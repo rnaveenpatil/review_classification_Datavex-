@@ -289,8 +289,9 @@ shuffled so the model saw both domains interleaved.
 
 - 🧠 Reads the **overall meaning and intention** of a review rather than scoring isolated
   keywords.
-- 🎭 Detects **sarcasm and indirect sentiment**, e.g. *"If you enjoy waiting 45 minutes for a
-  cold burger and rude service, this is your paradise."* → **Negative**.
+- 🎭 Captures **some level of sarcasm and indirect sentiment** (not perfectly — tricky
+  context can still be missed), e.g. *"If you enjoy waiting 45 minutes for a cold burger and
+  rude service, this is your paradise."* → **Negative**.
 - 📖 Handles **mixed long reviews** with a positive opening and a negative ending, e.g.
   *"The atmosphere is beautiful… But then the food arrived. My $40 steak was overcooked…"*
   → **Negative**.
@@ -424,7 +425,7 @@ It combines **IGWA App Reviews** (short, slang-heavy) with **Yelp Reviews** (lon
 | Macro Precision | **0.8941** | — |
 | Macro Recall | **0.8951** | — |
 | Macro F1 | **0.8945** | 0.8845 |
-| Sarcasm / indirect reviews | ✅ Handles them accurately | ➖ Not evaluated |
+| Sarcasm / indirect reviews | ✅ Captures some level of sarcasm | ➖ Not evaluated |
 | Hallucination risk | None (2 fixed classes) | None (bounded to fixed options) |
 | Inference | Softmax over 2 logits | Typed `choice` decision in one pass |
 | Speed | Very fast (tiny model) | Fast (~30–50 ms/review) |
@@ -433,13 +434,13 @@ It combines **IGWA App Reviews** (short, slang-heavy) with **Yelp Reviews** (lon
 
 ### 🏁 Key Takeaways
 
-- 🟦 **MiniLM** is light, understands complex intention and long reviews, and accurately
-  predicts indirect and sarcasm-based reviews — best for fast, high-throughput use.
+- 🟦 **MiniLM** is light, understands complex intention and long reviews, and captures
+  **some level of sarcasm** and indirect sentiment — best for fast, high-throughput use.
 - 🟧 **Laya** is a System One decision model: it **cannot generate text**, but it takes
   decisions **accurately and fastly** in a single pass, always returning a valid label.
 - ✅ Both exceed the accuracy expected for the test cases (TC1–TC6) and give a `predict`-style
-  result for unseen reviews. Only MiniLM is claimed to handle sarcasm; Laya is not evaluated
-  for sarcasm.
+  result for unseen reviews. Only MiniLM is claimed to handle some level of sarcasm; Laya is
+  not evaluated for sarcasm.
 
 ---
 
