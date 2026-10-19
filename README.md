@@ -7,12 +7,25 @@
 ![Models](https://img.shields.io/badge/models-MiniLM%20%7C%20Laya-orange)
 ![Best Accuracy](https://img.shields.io/badge/best%20accuracy-89.48%25-success)
 
-> **At a glance**
-> - 🎯 **Task:** classify a review as **POSITIVE** or **NEGATIVE**
-> - 🤖 **Models:** MiniLM (fine-tuned encoder) + Laya (System One decision model)
-> - 📊 **Data:** ~215,760 mixed App Store + Yelp reviews
-> - 🏆 **Best result:** 89.48% accuracy · 0.8945 macro F1 (MiniLM)
-> - 🚀 **Try online:** [MiniLM Space](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion) · [Laya Space](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)
+---
+
+> ### 🌟 What we built, in simple words
+>
+> We built an application that reads a review and tells you whether it is **POSITIVE** or
+> **NEGATIVE**.
+>
+> We trained **two different AI models** on a mix of app-store and Yelp reviews, compared
+> them, and **deployed both online** so anyone can try them in a browser — no setup needed.
+
+### 🔎 At a Glance
+
+| Question | Answer |
+|---|---|
+| **What does it do?** | Classifies a review as POSITIVE or NEGATIVE |
+| **How many models?** | Two — **MiniLM** and **Laya** |
+| **What data was used?** | 215,760 mixed App Store + Yelp reviews |
+| **Best accuracy?** | **89.48%** (MiniLM) |
+| **Can I try it online?** | Yes — live demo links are at the end of each model section |
 
 ### 📑 Table of Contents
 
@@ -21,6 +34,7 @@
 3. [Datasets Used](#3-datasets-used)
 4. [Our Solution](#4-our-solution)
 5. [Model Comparison](#5-model-comparison)
+6. [Glossary](#6-glossary)
 
 ---
 
@@ -53,6 +67,8 @@ Create an application that determines whether a product review expresses a **POS
 ---
 
 ## 2. Repository Structure
+
+Below is the folder layout. A one-line explanation of every file is in the collapsible list.
 
 ```text
 review_classification_Datavex-/
@@ -158,31 +174,39 @@ review_classification_Datavex-/
 
 ## 3. Datasets Used
 
+We used **two public datasets** from two very different review domains.
+
 ### 3.1 📱 App Reviews — IGWA
 
 The IGWA dataset contains Google Play Store reviews for Instagram, WhatsApp, and Facebook.
 The extended `dataset_IGWA_FB10.csv` used here has ~176,000 reviews, labelled
-**Negative / Neutral / Positive** based on star ratings. The reviews are short, informal,
-and full of slang, emojis, and typos.
+**Negative / Neutral / Positive** based on star ratings. The reviews are **short, informal,
+and full of slang, emojis, and typos**.
 
-> **How it is used:** The Neutral reviews are dropped to keep the task binary, the text is
-> cleaned and normalized, and the remaining reviews are merged with Yelp to build the mixed
-> training corpus.
+> **How it is used:** We drop the Neutral reviews to keep the task binary, clean the text,
+> and merge the remaining reviews with Yelp to build the mixed training corpus.
 
 ### 3.2 🍽️ Yelp Reviews — Binary Polarity
 
 The Yelp dataset contains 560,000 training and 38,000 test restaurant/business reviews.
 Stars **1–2 are Negative** and stars **3–4 are Positive**, giving a binary label directly.
-The reviews are long and detailed, and often mix positive and negative statements.
+The reviews are **long, detailed, and often mix positive and negative statements**.
 
 > **How it is used:** A **50,000-review subset** is merged with the IGWA app reviews to form
 > the mixed training corpus.
 
-### 3.3 🔗 How the Datasets Are Used
+### 3.3 🔗 How the Two Datasets Were Mixed
 
-The two sources are combined into one mixed corpus of **215,760 reviews** with
-`text` and `label` columns (`0 = Negative`, `1 = Positive`). This same mixed corpus feeds
-both models:
+The two sources are combined into one mixed corpus of **215,760 reviews** with `text` and
+`label` columns (`0 = Negative`, `1 = Positive`).
+
+| # | Dataset | Source file | What we take | Rows contributed |
+|:---:|---|---|---|---:|
+| 1 | 📱 App Reviews (IGWA) | [`dataset_IGWA_FB10.csv`](https://github.com/rnaveenpatil/review_classification_Datavex-/blob/main/original%20dataset/app%20review%20dataset/dataset_IGWA_FB10.csv) | Instagram / WhatsApp / Facebook reviews, **Neutral dropped** | ~166,000 |
+| 2 | 🍽️ Yelp Reviews | [`train.csv`](https://github.com/rnaveenpatil/review_classification_Datavex-/blob/main/original%20dataset/yelp_dataset/train.csv) | Random **50,000-review subset** | 50,000 |
+| 3 | 🧩 **Mixed corpus** | — | Combine the two, **shuffle**, relabel as binary | **215,760** |
+
+This same mixed corpus then feeds both models:
 
 | Model | File | Format |
 |---|---|---|
@@ -190,35 +214,60 @@ both models:
 | Laya | [`laya_train_fixed.jsonl`](https://github.com/rnaveenpatil/review_classification_Datavex-/blob/main/laya_fintuned_model/dataset/laya_train_fixed.jsonl) | JSONL (172,608 train rows) |
 
 > For Laya, the same corpus is converted to JSONL and split 80/20 — **172,608 training rows**
-> and **43,152 held-out test rows** (`test_split.csv`), then split again internally into
-> 155,348 train / 17,260 validation.
+> and **43,152 held-out test rows**, then split again internally into 155,348 train / 17,260
+> validation.
 
-### 3.4 🧩 Why We Mixed the Two Datasets
+### 3.4 🧩 Why We Mixed Them
 
-The two datasets sit at opposite ends of the review spectrum: IGWA is very short and
-slang-heavy, while Yelp is long and narrative. A model trained on only one domain fails on
-the other — app-review models get confused by long Yelp paragraphs, and Yelp-trained models
-fail on short slang. Mixing them teaches the model to handle **both very short and very long
-reviews**, and to interpret words in context (e.g. "bad" means different things in different
-sentences). The combined corpus is shuffled so the model never learns one domain before the
-other.
+The two datasets sit at opposite ends of the review spectrum:
+
+| Dataset | Review style | Why it is needed |
+|---|---|---|
+| 📱 IGWA | Short, slangy, emoji-heavy | Teaches the model to handle real app-store language |
+| 🍽️ Yelp | Long, detailed, narrative | Teaches the model to follow context across many sentences |
+
+A model trained on only one domain fails on the other. Mixing them teaches the model to
+handle **both very short and very long reviews**, and to read words in context (e.g. "bad"
+can mean different things in different sentences). The combined corpus is shuffled so the
+model never learns one domain before the other.
 
 ---
 
 ## 4. Our Solution
 
-Instead of a single classical baseline, we fine-tuned **two** transformer-based sentiment
-classifiers on a mixed corpus of App Store and Yelp reviews. Both models solve the same
-binary task (Negative vs. Positive) but take fundamentally different approaches: a
-lightweight BERT-family encoder (**MiniLM**) and a non-generative "System One" decision
-engine (**Laya**).
+> **In simple words:** We did not build a model from scratch. We took **two pre-trained
+> models that already understand language** and **fine-tuned** them on our labelled reviews,
+> so they learned this specific POSITIVE vs. NEGATIVE task.
 
-> Both models were trained on the same mixed review corpus (`0 = Negative`, `1 = Positive`),
-> combining short, slang-heavy app reviews with longer, detailed Yelp reviews.
+1. 🟦 **MiniLM** — a small, fast BERT-family encoder. We added a new 2-class classification
+   head and fine-tuned it on the mixed corpus.
+2. 🟧 **Laya** — a non-generative "System One" decision model. We fine-tuned it to answer a
+   `choice` question: `Negative` or `Positive`.
+
+Both models solve the same task but in different ways. We trained, evaluated, and then
+**deployed both as live demos on Hugging Face Spaces**.
+
+### 🧭 How It Works — Step by Step
+
+1. **Collect** app-store reviews and Yelp reviews.
+2. **Clean** the text and drop Neutral app reviews so the task is binary.
+3. **Mix and shuffle** both sources into one corpus of 215,760 reviews.
+4. **Fine-tune two models** on the same corpus: MiniLM and Laya.
+5. **Evaluate** with accuracy, precision, recall, and F1-score.
+6. **Deploy** both models on Hugging Face Spaces for live testing.
+
+```text
+📱 App Reviews ─┐
+                ├──▶ 🧹 Clean + Mix ──▶ 🧩 215,760 reviews
+🍽️ Yelp Reviews ┘                              │
+                                               ├──▶ 🟦 Fine-tune MiniLM ──▶ 89.48% ──▶ 🚀 Online demo
+                                               └──▶ 🟧 Fine-tune Laya   ──▶ 88.49% ──▶ 🚀 Online demo
+```
 
 ### 4.1 🟦 Model 1 — MiniLM (Fine-Tuned Encoder Classifier)
 
-[![Try MiniLM on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Try%20on%20Hugging%20Face-MiniLM-yellow)](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion)
+> **In simple words:** A small and fast AI model that reads a review and scores whether it
+> is positive or negative. Because it is lightweight, it is cheap to host and quick to run.
 
 | Item | Value |
 |---|---|
@@ -230,14 +279,13 @@ engine (**Laya**).
 | Epochs | 2 |
 | Batch size | 32 |
 
-**Approach:** The base MiniLM model is designed for semantic similarity and does not
-natively understand sentiment. We replaced its final layer with a 2-class classification
-head and fully fine-tuned all ~22.7M parameters on the mixed corpus. Text was lowercased,
-URLs/HTML stripped, whitespace normalized, and "Neutral" app reviews dropped to keep the
-task strictly binary. The combined dataset was shuffled so the model saw both domains
-interleaved.
+**How it was trained:** The base MiniLM model is designed for semantic similarity, not
+sentiment. We replaced its final layer with a 2-class classification head and fully
+fine-tuned all ~22.7M parameters on the mixed corpus. Text was lowercased, URLs/HTML were
+removed, whitespace was normalized, and Neutral app reviews were dropped. The dataset was
+shuffled so the model saw both domains interleaved.
 
-**Capabilities — it understands intention, not just words:**
+**What it can do:**
 
 - 🧠 Reads the **overall meaning and intention** of a review rather than scoring isolated
   keywords.
@@ -246,29 +294,27 @@ interleaved.
 - 📖 Handles **mixed long reviews** with a positive opening and a negative ending, e.g.
   *"The atmosphere is beautiful… But then the food arrived. My $40 steak was overcooked…"*
   → **Negative**.
-- 🔄 Handles **negation** and composition, e.g. *"not bad"* → **Positive**.
-- ✂️ Works across both **very short slang** (*"worst update ever"*) and **long paragraphs**.
+- 🔄 Handles **negation**, e.g. *"not bad"* → **Positive**.
+- ✂️ Works on both **very short slang** (*"worst update ever"*) and **long paragraphs**.
 
-**Inference:** Raw logits are passed through Softmax to give class probabilities, and a
-sentiment score is derived as `P(Positive) − P(Negative)` on a scale from −1.0 (strongly
-negative) to +1.0 (strongly positive).
+**How predictions are made:** The model outputs two scores (Negative, Positive). A Softmax
+turns them into probabilities, and the sentiment score is `P(Positive) − P(Negative)`, from
+−1.0 (strongly negative) to +1.0 (strongly positive).
 
-**How we trained it — by mixing two datasets:** We fine-tuned MiniLM on a single mixed
-corpus that combines the **IGWA App Reviews** dataset (short, slang-heavy Google Play
-reviews) with the **Yelp Reviews** dataset (long, detailed reviews). The combined training
-file used for this model lives in this repo:
+**How the training data was built:** We fine-tuned MiniLM on the mixed corpus described in
+§3.3 — **IGWA App Reviews** (short and slang-heavy) plus **Yelp Reviews** (long and
+detailed). The file is in this repo:
 [`miniLM_fine_tuned/dataset/mixed_app_yelp_dataset_for_minlm.csv`](https://github.com/rnaveenpatil/review_classification_Datavex-/blob/main/miniLM_fine_tuned/dataset/mixed_app_yelp_dataset_for_minlm.csv).
-This **same mixed dataset is reused by the Laya model** (see §4.2), where it is converted
-into Laya's JSONL format.
+The **same mixed dataset is reused by Laya** (§4.2), converted to JSONL.
 
-**Results (evaluated on 215,760 reviews):**
+**Results — evaluated on 215,760 reviews:**
 
-| Metric | Score |
-|---|:---:|
-| Accuracy | **0.8948** |
-| Macro Precision | 0.8941 |
-| Macro Recall | 0.8951 |
-| Macro F1 | **0.8945** |
+| Metric | What it means | Score |
+|---|---|---|
+| Accuracy | Share of reviews classified correctly | **0.8948** |
+| Macro Precision | How often positive predictions are right | 0.8941 |
+| Macro Recall | How many true positives are found | 0.8951 |
+| Macro F1 | Balance of precision and recall | **0.8945** |
 
 **Result Images**
 
@@ -280,12 +326,20 @@ into Laya's JSONL format.
 <img src="https://raw.githubusercontent.com/rnaveenpatil/review_classification_Datavex-/main/miniLM_fine_tuned/sentiment_test_results/positive_negative_predictions.png" width="360" alt="MiniLM predictions">
 </p>
 
-**Artifacts:** `miniLM_fine_tuned/miniLM_model/` (weights, config, tokenizer) and
+**Files:** `miniLM_fine_tuned/miniLM_model/` (weights, config, tokenizer) and
 `miniLM_fine_tuned/sentiment_test_results/` (metrics, predictions, plots).
+
+> 🚀 **LIVE DEMO — Try MiniLM now!**
+>
+> We **fine-tuned and deployed this model on Hugging Face Spaces**.
+>
+> **➡️ [Click here to open the MiniLM Review Sentiment Classifier deployed on huggingface space](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion)**
 
 ### 4.2 🟧 Model 2 — Laya (System One Decision Model)
 
-[![Try Laya on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Try%20on%20Hugging%20Face-Laya-yellow)](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)
+> **In simple words:** Laya is a **decision model, not a chatbot**. It does not write text.
+> It reads the review and simply picks one answer: **Negative** or **Positive** — quickly
+> and with a calibrated confidence.
 
 | Item | Value |
 |---|---|
@@ -299,40 +353,38 @@ into Laya's JSONL format.
 | Epochs | 1 |
 | Batch size | 8 |
 
-**Approach:** Unlike a generative LLM, Laya does not produce text. It takes a review as a
-*state* and a typed *question* ("What is the sentiment of this review?") and, in a single
-forward pass, returns calibrated probabilities over the predefined options
-`["Negative", "Positive"]`. Because the model can only answer within the options we define,
-it cannot invent an out-of-range label. The dataset was converted to Laya's JSONL schema
-(`state` / `questions` / `label`) and the model was fine-tuned with soft targets, shuffled
-option order, and temperature calibration on the validation set.
+**How it works:** Unlike a generative LLM, Laya does not produce text. It takes a review as
+a *state* and a typed *question* ("What is the sentiment of this review?") and, in a single
+forward pass, returns calibrated probabilities for the predefined options
+`["Negative", "Positive"]`. Because the answer must be one of those options, the model
+cannot invent an out-of-range label. The data was converted to Laya's JSONL schema
+(`state` / `questions` / `label`) and fine-tuned with soft targets, shuffled option order,
+and temperature calibration.
 
-**Capabilities — it understands intention, not just words:**
+**What it can do:**
 
 - 🧠 Conditions on the **question** and reads the **whole review** in one pass, so it captures
-  the author's **overall intention and tone** rather than scoring single keywords.
+  the author's **overall intention and tone** rather than single keywords.
 - 📖 Handles **mixed reviews** that contain both positive and negative statements and returns
-  a single bounded decision.
+  one bounded decision.
 - 🛡️ Cannot hallucinate: the answer is always one of the defined options, so labels are
   always valid.
 
-**Inference:** `laya.Agent("<checkpoint>")` loads the model; a `choice` question returns the
-predicted label and calibrated probabilities directly — no JSON parsing or retry loop.
+**How predictions are made:** `laya.Agent("<checkpoint>")` loads the model. A `choice`
+question returns the predicted label and calibrated probabilities directly — no JSON to
+parse and no retry loop.
 
-**How we trained it — by mixing two datasets:** We fine-tuned Laya on a single mixed JSONL
-corpus that combines the **IGWA App Reviews** dataset (short, slang-heavy Google Play
-reviews) with the **Yelp Reviews** dataset (long, detailed reviews). The combined training
-file used for this model lives in this repo:
+**How the training data was built:** We fine-tuned Laya on the **same mixed corpus** used
+for MiniLM, converted to Laya's JSONL format. The file is in this repo:
 [`laya_fintuned_model/dataset/laya_train_fixed.jsonl`](https://github.com/rnaveenpatil/review_classification_Datavex-/blob/main/laya_fintuned_model/dataset/laya_train_fixed.jsonl).
-This is the **same mixed dataset used to train MiniLM** (see §4.1), converted into Laya's
-JSONL format.
+It combines **IGWA App Reviews** (short, slang-heavy) with **Yelp Reviews** (long, detailed).
 
-**Results (held-out validation set, 17,260 samples):**
+**Results — held-out validation set, 17,260 reviews:**
 
-| Metric | Score |
-|---|:---:|
-| Accuracy | **0.8849** |
-| Macro F1 | **0.8845** |
+| Metric | What it means | Score |
+|---|---|---|
+| Accuracy | Share of reviews classified correctly | **0.8849** |
+| Macro F1 | Balance of precision and recall | **0.8845** |
 
 **Result Images**
 
@@ -342,9 +394,15 @@ JSONL format.
 <img src="https://raw.githubusercontent.com/rnaveenpatil/review_classification_Datavex-/main/laya_fintuned_model/laya_model_result/sentiment_distribution%20%281%29.png" width="360" alt="Laya sentiment distribution">
 </p>
 
-**Artifacts:** `laya_fintuned_model/laya_model/` (weights, config, tokenizer),
+**Files:** `laya_fintuned_model/laya_model/` (weights, config, tokenizer),
 `laya_fintuned_model/train.py` + `common.py` (training pipeline), and
 `laya_fintuned_model/laya_model_result/` (F1 scores, results, sentiment distribution plots).
+
+> 🚀 **LIVE DEMO — Try Laya now!**
+>
+> We **fine-tuned and deployed this model on Hugging Face Spaces**.
+>
+> **➡️ [Click here to open the Laya Review Sentiment Classifier deployed on huggingface space](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)**
 
 ---
 
@@ -366,7 +424,7 @@ JSONL format.
 | Macro Precision | **0.8941** | — |
 | Macro Recall | **0.8951** | — |
 | Macro F1 | **0.8945** | 0.8845 |
-| Sarcasm / indirect reviews | ✅ Handles them accurately |  |
+| Sarcasm / indirect reviews | ✅ Handles them accurately | ➖ Not evaluated |
 | Hallucination risk | None (2 fixed classes) | None (bounded to fixed options) |
 | Inference | Softmax over 2 logits | Typed `choice` decision in one pass |
 | Speed | Very fast (tiny model) | Fast (~30–50 ms/review) |
@@ -382,6 +440,24 @@ JSONL format.
 - ✅ Both exceed the accuracy expected for the test cases (TC1–TC6) and give a `predict`-style
   result for unseen reviews. Only MiniLM is claimed to handle sarcasm; Laya is not evaluated
   for sarcasm.
+
+---
+
+## 6. Glossary
+
+Simple definitions for terms used in this README:
+
+| Term | Simple meaning |
+|---|---|
+| **Sentiment** | The feeling of a review — positive or negative. |
+| **Fine-tuning** | Taking a model that already understands language and teaching it one specific task with labelled examples. |
+| **Encoder** | The part of a model that reads text and turns it into numbers that capture meaning. |
+| **System One** | A model that makes a fast, bounded decision instead of writing free text. |
+| **Token** | A small piece of text (a word or part of a word) that the model reads. |
+| **Accuracy** | The share of predictions that are correct. |
+| **Precision** | Of the reviews predicted positive, how many really are positive. |
+| **Recall** | Of the reviews that are actually positive, how many the model found. |
+| **F1-score** | One balanced score that combines precision and recall (higher is better). |
 
 ---
 
