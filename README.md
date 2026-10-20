@@ -334,7 +334,7 @@ The **same mixed dataset is reused by Laya** (§4.2), converted to JSONL.
 >
 > We **fine-tuned and deployed this model on Hugging Face Spaces**.
 >
-> **➡️ [Click here to open the MiniLM Review Sentiment Classifier deployed on huggingface space](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion)**
+> [![Open MiniLM Demo on Hugging Face](https://img.shields.io/badge/%F0%9F%9A%80%20Open%20MiniLM%20Demo-Hugging%20Face-yellow?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion)
 
 ### 4.2 🟧 Model 2 — Laya (System One Decision Model)
 
@@ -403,7 +403,7 @@ It combines **IGWA App Reviews** (short, slang-heavy) with **Yelp Reviews** (lon
 >
 > We **fine-tuned and deployed this model on Hugging Face Spaces**.
 >
-> **➡️ [Click here to open the Laya Review Sentiment Classifier deployed on huggingface space](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)**
+> [![Open Laya Demo on Hugging Face](https://img.shields.io/badge/%F0%9F%9A%80%20Open%20Laya%20Demo-Hugging%20Face-orange?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)
 
 ---
 
@@ -437,8 +437,7 @@ It combines **IGWA App Reviews** (short, slang-heavy) with **Yelp Reviews** (lon
 - 🟦 **MiniLM** is light, understands complex intention and long reviews, and captures
   **some level of sarcasm** and indirect sentiment — best for fast, high-throughput use.
 - 🟧 **Laya** is a System One decision model: it **cannot generate text**, but it takes
-  decisions **accurately and fastly** in a single pass, always returning a valid label.
-- ✅ Both exceed the accuracy expected for the test cases (TC1–TC6) and give a `predict`-style
+  decisions **accurately and fast** in a single pass, always returning a valid label.- ✅ Both exceed the accuracy expected for the test cases (TC1–TC6) and give a `predict`-style
   result for unseen reviews. Only MiniLM is claimed to handle some level of sarcasm; Laya is
   not evaluated for sarcasm.
 
