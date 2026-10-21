@@ -330,11 +330,12 @@ The **same mixed dataset is reused by Laya** (§4.2), converted to JSONL.
 **Files:** `miniLM_fine_tuned/miniLM_model/` (weights, config, tokenizer) and
 `miniLM_fine_tuned/sentiment_test_results/` (metrics, predictions, plots).
 
-> 🚀 **LIVE DEMO — Try MiniLM now!**
+> 🚀 **LIVE DEMO — MiniLM**
 >
-> We **fine-tuned and deployed this model on Hugging Face Spaces**.
+> We **fine-tuned this model and deployed it on Hugging Face Spaces**.
+> **👇 Click the button below to use the model.**
 >
-> [![Open MiniLM Demo on Hugging Face](https://img.shields.io/badge/%F0%9F%9A%80%20Open%20MiniLM%20Demo-Hugging%20Face-yellow?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion)
+> [![Click here to use the MiniLM model](https://img.shields.io/badge/%F0%9F%91%89%20CLICK%20HERE%20TO%20USE%20THE%20MINILM%20MODEL-Hugging%20Face-yellow?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/rnaveenpatil/miniLm_fintuned_review_classificartion)
 
 ### 4.2 🟧 Model 2 — Laya (System One Decision Model)
 
@@ -399,11 +400,12 @@ It combines **IGWA App Reviews** (short, slang-heavy) with **Yelp Reviews** (lon
 `laya_fintuned_model/train.py` + `common.py` (training pipeline), and
 `laya_fintuned_model/laya_model_result/` (F1 scores, results, sentiment distribution plots).
 
-> 🚀 **LIVE DEMO — Try Laya now!**
+> 🚀 **LIVE DEMO — Laya**
 >
-> We **fine-tuned and deployed this model on Hugging Face Spaces**.
+> We **fine-tuned this model and deployed it on Hugging Face Spaces**.
+> **👇 Click the button below to use the model.**
 >
-> [![Open Laya Demo on Hugging Face](https://img.shields.io/badge/%F0%9F%9A%80%20Open%20Laya%20Demo-Hugging%20Face-orange?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)
+> [![Click here to use the Laya model](https://img.shields.io/badge/%F0%9F%91%89%20CLICK%20HERE%20TO%20USE%20THE%20LAYA%20MODEL-Hugging%20Face-orange?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/rnaveenpatil/Laya_fintuned_review_clssification)
 
 ---
 
